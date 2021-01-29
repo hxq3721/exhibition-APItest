@@ -1,0 +1,1066 @@
+{
+	"info": {
+		"_postman_id": "93c81fbb-b367-4329-9282-73aeba273267",
+		"name": "Exhibition",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "登陆",
+			"item": [
+				{
+					"name": "获取图片验证码",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//判断接口返回Status code is 200",
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"",
+									"//测试",
+									"",
+									"if(responseCode.code === 200 && responseBody.has(\"picCheckingToken\")){",
+									"    //如果 code 为 200， 并且返回的数据中存在 picCheckingToken 关键字，则认为登录成功",
+									"    tests[\"获取验证码成功\"] = true;",
+									"    //判断返回的内容是否存在“关键字”",
+									"    tests[\"body matches base64Str\"] = responseBody.has(\"base64Str\");",
+									"",
+									"    //判断返回内容是否跟预期完全相等",
+									"    //tests[\"code\"] = responseBody === \"0\";   ",
+									"",
+									"    //将返回的内容转为 json 格式，并且取到 picCheckingToken 内容，添加到环境变量中",
+									"    var jsonData = JSON.parse(responseBody); ",
+									"",
+									"    //picCheckingToken的取值方式视具体的 json 数据结构而定",
+									"    //postman.setEnvironmentVariable(\"Token\",jsonData.resul.picCheckingToken);",
+									"",
+									"    // 设置环境变量gwtoken，供后面的接口引用 ",
+									"    pm.environment.set(\"gwToken\", data.data.gwToken);",
+									"    ",
+									"    //跳转到 Request2 接口",
+									"    //postman.setNextRequest(\"\")",
+									"    ",
+									"//}else{",
+									"    //tests[\"获取验证码失败\"] = false;",
+									"    ",
+									"    //登录失败，可以选择跳转到对应失败后的处理接口进行测试",
+									"    //postman.setNextRequest(\"Other Request\")",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "{{Content-Type}}",
+								"type": "text"
+							},
+							{
+								"key": "guserId",
+								"value": "2a4e943c-3570-4a2c-8067-629e37e1a8aa",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "a9422f07db7568feb3f5562ca1e56e5f77ef6064c8e00fd3ee00e570f378e6ee",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "token"
+						},
+						"url": {
+							"raw": "{{url}}/gcard/PicChecking/getPicCheckingList",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gcard",
+								"PicChecking",
+								"getPicCheckingList"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "验证短信",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "{{Content-Type}}"
+							},
+							{
+								"key": "guserId",
+								"type": "text",
+								"value": "2a4e943c-3570-4a2c-8067-629e37e1a8aa"
+							},
+							{
+								"key": "token",
+								"type": "text",
+								"value": "a9422f07db7568feb3f5562ca1e56e5f77ef6064c8e00fd3ee00e570f378e6ee"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"base64ValiateStr\": \"0,1,0,3\",\n    \"phone\": \"15697751008\",\n    \"picCheckingToken\": \"9c2e2190-c0b7-4fcc-9b59-efdef204b64b\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/gcard/superlive/usercenter/get-smscode",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gcard",
+								"superlive",
+								"usercenter",
+								"get-smscode"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "热播登陆",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//判断接口返回Status code is 200",
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"",
+									"//测试",
+									"if(responseCode.code === 200 && responseBody.has(\"token\")){",
+									"    //如果 code 为 200， 并且返回的数据中存在 token 关键字，则认为登录成功",
+									"    tests[\"login\"] = true;",
+									"    //判断返回的内容是否存在“关键字”",
+									"    tests[\"返回的内容存在成功\"] = responseBody.has(\"成功\");",
+									"",
+									"    //判断返回内容是否跟预期完全相等",
+									"    //tests[\"成功\"] = responseBody === \"成功\";   ",
+									"    //将返回的内容转为 json 格式，并且取到 Token 内容，添加到环境变量中",
+									"    var jsonData = JSON.parse(responseBody);",
+									"",
+									"    //token的取值方式视具体的 json 数据结构而定",
+									"    postman.setEnvironmentVariable(\"token\",jsonData.token);  ",
+									"",
+									"",
+									"    //跳转到 Request2 接口",
+									"    //postman.setNextRequest(\"\")",
+									"    ",
+									"//}else{",
+									"    //tests[\"获取验证码失败\"] = false;",
+									"    ",
+									"    //登录失败，可以选择跳转到对应失败后的处理接口进行测试",
+									"    //postman.setNextRequest(\"Other Request\")",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "{{Content-Type}}",
+								"type": "text"
+							},
+							{
+								"key": "guserId",
+								"value": "2a4e943c-3570-4a2c-8067-629e37e1a8aa",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "a9422f07db7568feb3f5562ca1e56e5f77ef6064c8e00fd3ee00e570f378e6ee",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phone\": \"15697751008\",\n    \"smscode\": \"8888\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/gcard/superlive/usercenter/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"gcard",
+								"superlive",
+								"usercenter",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "会展详情",
+			"item": [
+				{
+					"name": "会展是否可分享",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "grouptype",
+								"value": "{{grouptype}}",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "{{Content-Type}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"is_get_all\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{exhibition-test-url}}/gcorp/meeting-group/system/config/get",
+							"host": [
+								"{{exhibition-test-url}}"
+							],
+							"path": [
+								"gcorp",
+								"meeting-group",
+								"system",
+								"config",
+								"get"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "会展index",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "grouptype",
+								"value": "{{grouptype}}",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "{{Content-Type}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"exhibition_id\": 92\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{exhibition-test-url}}/gcorp/meeting-group/exhibition/index",
+							"host": [
+								"{{exhibition-test-url}}"
+							],
+							"path": [
+								"gcorp",
+								"meeting-group",
+								"exhibition",
+								"index"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "参展商列表group-list",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "grouptype",
+								"value": "{{grouptype}}",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "{{Content-Type}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"exhibition_id\": 92,\n\t\"pageIndex\": 1,\n\t\"pageSize\": 30,\n\t\"type\": \"latest\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{exhibition-test-url}}/gcorp/meeting-group/exhibition/group/list",
+							"host": [
+								"{{exhibition-test-url}}"
+							],
+							"path": [
+								"gcorp",
+								"meeting-group",
+								"exhibition",
+								"group",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "云会展推广信息列表",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "grouptype",
+								"value": "{{grouptype}}",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "{{Content-Type}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"exhibition_id\": 92,\n\t\"pageIndex\": 1,\n\t\"pageSize\": 30\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{exhibition-test-url}}/gcorp/meeting-group/exhibition/promotion/list",
+							"host": [
+								"{{exhibition-test-url}}"
+							],
+							"path": [
+								"gcorp",
+								"meeting-group",
+								"exhibition",
+								"promotion",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "判断该用户是否属于当前展会",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "grouptype",
+								"value": "{{grouptype}}",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "{{Content-Type}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"exhibition_id\": 92\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{exhibition-test-url}}/gcorp/meeting-group/exhibition/exhibitor/auto-login",
+							"host": [
+								"{{exhibition-test-url}}"
+							],
+							"path": [
+								"gcorp",
+								"meeting-group",
+								"exhibition",
+								"exhibitor",
+								"auto-login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "会展卡片详情",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "grouptype",
+								"value": "{{grouptype}}",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "{{Content-Type}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"page_index\": 1,\n\t\"page_size\": 20\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{exhibition-test-url}}/gcorp/meeting-group/exhibition/my-list",
+							"host": [
+								"{{exhibition-test-url}}"
+							],
+							"path": [
+								"gcorp",
+								"meeting-group",
+								"exhibition",
+								"my-list"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "展位",
+			"item": [
+				{
+					"name": "进入展位",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//响应数据中包含的字符串",
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"success\");",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var schema = {",
+									"    \"items\": {",
+									"        \"type\": \"boolean\"",
+									"    }",
+									"};",
+									"",
+									"var data1 = [true, false];",
+									"var data2 = [true, 123];",
+									"",
+									"pm.test('Schema is valid', function () {",
+									"    pm.expect(tv4.validate(data1, schema)).to.be.true;",
+									"    pm.expect(tv4.validate(data2, schema)).to.be.true;",
+									"});",
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.value).to.eql(100);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "grouptype",
+								"value": "{{grouptype}}",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "410846f014ff902bf5cce16d0b0782ece96cf6d486a6b25499acfd26cd993071",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "{{Content-Type}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"group_id\": 35814,\n\t\"meeting_auth\": \"\",\n\t\"token\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{exhibition-test-url}}/gcorp/meeting-group/room/enter",
+							"host": [
+								"{{exhibition-test-url}}"
+							],
+							"path": [
+								"gcorp",
+								"meeting-group",
+								"room",
+								"enter"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "展位详情",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "grouptype",
+								"value": "{{grouptype}}",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "410846f014ff902bf5cce16d0b0782ece96cf6d486a6b25499acfd26cd993071",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "{{Content-Type}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"exhibition_id\": 104,\n\t\"group_id\": 35814\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{exhibition-test-url}}/gcorp/meeting-group/exhibition/info",
+							"host": [
+								"{{exhibition-test-url}}"
+							],
+							"path": [
+								"gcorp",
+								"meeting-group",
+								"exhibition",
+								"info"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "在线用户",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "grouptype",
+								"value": "{{grouptype}}",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "410846f014ff902bf5cce16d0b0782ece96cf6d486a6b25499acfd26cd993071",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "{{Content-Type}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"group_id\": 35814,\n\t\"has_creator\": 0,\n\t\"pageIndex\": 1,\n\t\"pageSize\": 15\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{exhibition-test-url}}/gcorp/meeting-group/member/new-real-list",
+							"host": [
+								"{{exhibition-test-url}}"
+							],
+							"path": [
+								"gcorp",
+								"meeting-group",
+								"member",
+								"new-real-list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "展位商品列表",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "grouptype",
+								"value": "{{grouptype}}",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "410846f014ff902bf5cce16d0b0782ece96cf6d486a6b25499acfd26cd993071",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "{{Content-Type}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"group_id\": 35814,\n\t\"page_index\": 1,\n\t\"page_size\": 20,\n\t\"sale_flag\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{exhibition-test-url}}/gcorp/meeting-group/exhibition/booth/goods",
+							"host": [
+								"{{exhibition-test-url}}"
+							],
+							"path": [
+								"gcorp",
+								"meeting-group",
+								"exhibition",
+								"booth",
+								"goods"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "下架会展商品",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "grouptype",
+								"value": "{{grouptype}}",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "410846f014ff902bf5cce16d0b0782ece96cf6d486a6b25499acfd26cd993071",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "{{Content-Type}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"goods_id\": 12710,\n\t\"group_id\": 35814,\n\t\"type\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{exhibition-test-url}}/gcorp/meeting-group/exhibition/booth/goods-up-down",
+							"host": [
+								"{{exhibition-test-url}}"
+							],
+							"path": [
+								"gcorp",
+								"meeting-group",
+								"exhibition",
+								"booth",
+								"goods-up-down"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "发言",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "grouptype",
+								"value": "{{grouptype}}",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "410846f014ff902bf5cce16d0b0782ece96cf6d486a6b25499acfd26cd993071",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "{{Content-Type}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"g\": 35814,\n\t\"p1\": 100080001,\n\t\"p2\": \"{\\\"content\\\":\\\"555\\\",\\\"file_type\\\":\\\"\\\",\\\"height\\\":0,\\\"imgFaceUrl\\\":\\\"https://images.gmall88.com/d509ac1d-eed3-46c1-8d4f-1199e613aa85_720x720.png\\\",\\\"name\\\":\\\"易超华😘😘\\\",\\\"noticeId\\\":0,\\\"onlineNum\\\":0,\\\"roomId\\\":0,\\\"roomUid\\\":0,\\\"state\\\":0,\\\"time\\\":0,\\\"title\\\":\\\"\\\",\\\"totalNum\\\":1,\\\"uid\\\":0,\\\"url\\\":\\\"\\\",\\\"userId\\\":\\\"948faad4-ee7d-49ae-bcfe-741506911805\\\",\\\"width\\\":0}\",\n\t\"t\": 1610964701255\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{exhibition-test-url}}/gcorp/meeting-msg/msg/add",
+							"host": [
+								"{{exhibition-test-url}}"
+							],
+							"path": [
+								"gcorp",
+								"meeting-msg",
+								"msg",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "头部-相册、视频、资料列表",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "grouptype",
+								"value": "{{grouptype}}",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "410846f014ff902bf5cce16d0b0782ece96cf6d486a6b25499acfd26cd993071",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "{{Content-Type}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"file_type\": 2,\n\t\"group_id\": 35814,\n\t\"pageIndex\": 1,\n\t\"pageSize\": 20,\n\t\"updated_at\": 1610964823684\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{exhibition-test-url}}/gcorp/meeting-group/exhibition/file-list",
+							"host": [
+								"{{exhibition-test-url}}"
+							],
+							"path": [
+								"gcorp",
+								"meeting-group",
+								"exhibition",
+								"file-list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "广告位开关",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "grouptype",
+								"value": "{{grouptype}}",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "410846f014ff902bf5cce16d0b0782ece96cf6d486a6b25499acfd26cd993071",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "{{Content-Type}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"group_id\": 35814,\n\t\"is_show\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{exhibition-test-url}}/gcorp/meeting-group/exhibition/group/adv/list",
+							"host": [
+								"{{exhibition-test-url}}"
+							],
+							"path": [
+								"gcorp",
+								"meeting-group",
+								"exhibition",
+								"group",
+								"adv",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "广告位列表",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "grouptype",
+								"value": "{{grouptype}}",
+								"type": "text"
+							},
+							{
+								"key": "token",
+								"value": "410846f014ff902bf5cce16d0b0782ece96cf6d486a6b25499acfd26cd993071",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "{{Content-Type}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"group_id\": 35814\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{exhibition-test-url}}/gcorp/meeting-group/exhibition/group/adv/list",
+							"host": [
+								"{{exhibition-test-url}}"
+							],
+							"path": [
+								"gcorp",
+								"meeting-group",
+								"exhibition",
+								"group",
+								"adv",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "上传广告位",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"group_id\": 35814,\n\t\"list\": [{\n\t\t\"file_type\": \"video\",\n\t\t\"seqno\": 1,\n\t\t\"url\": \"https://videos.gmall88.com/1741f8b5-72a4-4780-99ff-03c57d04f592_640x360.mp4\"\n\t}, {\n\t\t\"file_type\": \"pic\",\n\t\t\"seqno\": 2,\n\t\t\"url\": \"https://images.gmall88.com/a613c8a4-6f0c-4f77-a512-24f4f0214233_222x424.png\"\n\t}, {\n\t\t\"file_type\": \"pic\",\n\t\t\"seqno\": 3,\n\t\t\"url\": \"https://images.gmall88.com/88f84d7b-b5a3-44c2-a139-a6b1f4d67479_1047x2000.png\"\n\t}]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{exhibition-test-url}}/gcorp/meeting-group/exhibition/group/adv/add",
+							"host": [
+								"{{exhibition-test-url}}"
+							],
+							"path": [
+								"gcorp",
+								"meeting-group",
+								"exhibition",
+								"group",
+								"adv",
+								"add"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
